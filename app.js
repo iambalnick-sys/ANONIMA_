@@ -5,10 +5,10 @@ const audioURLs = {};
 // --- SIMPLE USER SYSTEM ---
 let currentUser = localStorage.getItem('anonima_user');
 if(!currentUser){
-  currentUser = prompt("Choose a username for ANONIMA_:") || "anonymous";
+  currentUser = prompt("Choose a username:") || "anonymous";
   localStorage.setItem('anonima_user', currentUser);
 }
-const ADMIN_CODE = "ANONIMA_1312";
+const ADMIN_CODE = "io ho l'admin, IO SONO DIO!!!";
 let isAdmin = localStorage.getItem('anonima_admin') === '1';
 
 function loginAdmin(){
@@ -19,6 +19,13 @@ function loginAdmin(){
     alert("You are admin now");
     render();
   } else { alert("Wrong code"); }
+}
+
+function logoutAdmin(){
+  isAdmin = false;
+  localStorage.removeItem('anonima_admin');
+  alert("Logged out from admin");
+  render();
 }
 
 function upload(){
@@ -35,13 +42,12 @@ function upload(){
   audioURLs[id] = URL.createObjectURL(file);
 
   const tracks = getTracks();
-  // NOW WE SAVE WHO UPLOADED IT
   tracks.unshift({ id, title, license, keep:0, skip:0, status:'pending', hasAudio:true, name: file.name, uploader: currentUser, voters: [] });
   saveTracks(tracks);
 
   titleEl.value=''; fileInput.value='';
   render();
-  alert('Uploaded to The Vault as '+currentUser);
+  alert('Uploaded to The Vault as anonymous');
 }
 
 function vote(id, type){
@@ -49,12 +55,10 @@ function vote(id, type){
   const t=tracks.find(x=>x.id===id);
   if(!t) return;
 
-  // 1. FIX: you cannot vote on your own tracks
   if(t.uploader === currentUser &&!isAdmin){
     alert("You cannot vote on your own tracks");
     return;
   }
-  // prevent double voting
   if(t.voters && t.voters.includes(currentUser)){
     alert("You already voted"); return;
   }
@@ -96,12 +100,16 @@ function render(){
     </div>
   `).join('') || '<p style="color:#555">Empty</p>';
 
-  // admin button if not admin yet
   if(!document.getElementById('adminBtn')){
     const b = document.createElement('button');
-    b.id='adminBtn'; b.textContent='Admin login'; b.onclick=loginAdmin;
-    b.style='position:fixed;bottom:10px;right:10px;opacity:0.5';
+    b.id='adminBtn';
+    b.textContent = isAdmin? 'Logout admin' : 'Admin login';
+    b.onclick = isAdmin? logoutAdmin : loginAdmin;
+    b.style='position:fixed;bottom:10px;right:10px;opacity:0.7';
     document.body.appendChild(b);
+  } else {
+    document.getElementById('adminBtn').textContent = isAdmin? 'Logout admin' : 'Admin login';
+    document.getElementById('adminBtn').onclick = isAdmin? logoutAdmin : loginAdmin;
   }
 }
 render();
