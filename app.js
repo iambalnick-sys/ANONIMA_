@@ -8,7 +8,7 @@ if(!currentUser){
   currentUser = prompt("Choose a username for ANONIMA_:") || "anonymous";
   localStorage.setItem('anonima_user', currentUser);
 }
-const ADMIN_CODE = "CAPTAIN"; // change this password
+const ADMIN_CODE = "ANONIMA_1312";
 let isAdmin = localStorage.getItem('anonima_admin') === '1';
 
 function loginAdmin(){
@@ -83,7 +83,7 @@ function render(){
 
   document.getElementById('vault').innerHTML = vault.map(t=>`
     <div class="track">
-      <b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license} - by ${t.uploader||'?'}</span><br>
+      <b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license} - by anonymous</span><br>
       ${audioURLs[t.id]? `<audio controls src="${audioURLs[t.id]}" style="width:100%;margin:10px 0"></audio><br>` : `<p style="color:#666;font-size:12px">[re-upload to listen in this session]</p>`}
       <button onclick="vote('${t.id}','keep')">KEEP (${t.keep})</button>
       <button onclick="vote('${t.id}','skip')">SKIP (${t.skip})</button>
@@ -91,7 +91,7 @@ function render(){
     </div>`).join('') || '<p style="color:#555">Empty</p>';
 
   document.getElementById('live').innerHTML = live.map(t=>`
-    <div class="track"><b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license} - by ${t.uploader||'?'}</span>
+    <div class="track"><b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license} - by anonymous</span>
     ${isAdmin? ` <button onclick="deleteTrack('${t.id}')" style="color:red">X</button>` : ''}
     </div>
   `).join('') || '<p style="color:#555">Empty</p>';
