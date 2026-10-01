@@ -1,13 +1,12 @@
 function getTracks(){ try{ return JSON.parse(localStorage.getItem('anonima_tracks')||'[]'); }catch(e){ return []; } }
 function saveTracks(t){ localStorage.setItem('anonima_tracks', JSON.stringify(t)); }
-const audioURLs = {};
 
 let currentUser = localStorage.getItem('anonima_user');
 if(!currentUser){
   currentUser = prompt("Choose a username:") || "anonymous";
   localStorage.setItem('anonima_user', currentUser);
 }
-const ADMIN_CODE = "io ho l'admin, IO HO IL POTERE!!!";
+const ADMIN_CODE = "io so l'admin, IO HO IL POTERE!!! (ma lo usero coscientemente)";
 let isAdmin = localStorage.getItem('anonima_admin') === '1';
 
 function loginAdmin(){
@@ -28,14 +27,19 @@ function upload(){
   const title = document.getElementById('title').value.trim();
   const license = document.getElementById('license').value;
   const file = document.getElementById('file').files[0];
-  if(!title ||!file){ return; }
-  const id = Date.now().toString();
-  audioURLs[id] = URL.createObjectURL(file);
-  const tracks = getTracks();
-  tracks.unshift({ id, title, license, keep:0, skip:0, status:'pending', hasAudio:true, uploader: currentUser, voters: [] });
-  saveTracks(tracks);
-  document.getElementById('title').value=''; document.getElementById('file').value='';
-  render();
+  if(!title ||!file){ alert("Metti titolo e file"); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const audioData = e.target.result; // DataURL permanente
+    const id = Date.now().toString();
+    const tracks = getTracks();
+    tracks.unshift({ id, title, license, keep:0, skip:0, status:'pending', uploader: currentUser, voters: [], audioData });
+    saveTracks(tracks);
+    document.getElementById('title').value=''; document.getElementById('file').value='';
+    render();
+  };
+  reader.readAsDataURL(file);
 }
 
 function vote(id, type){
@@ -69,14 +73,14 @@ function render(){
   document.getElementById('vault').innerHTML = vault.map(t=>`
     <div class="track">
       <b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license}</span><br>
-      ${audioURLs[t.id]? `<audio controls src="${audioURLs[t.id]}" style="width:100%;margin:10px 0"></audio><br>` : ``}
+      ${t.audioData? `<audio controls src="${t.audioData}" style="width:100%;margin:10px 0"></audio><br>` : ``}
       <button onclick="vote('${t.id}','keep')">KEEP (${t.keep})</button>
       <button onclick="vote('${t.id}','skip')">SKIP (${t.skip})</button>
       ${isAdmin? `<button onclick="deleteTrack('${t.id}')" style="color:red">DELETE</button>` : ''}
     </div>`).join('') || '<p style="color:#555">Empty</p>';
   document.getElementById('live').innerHTML = live.map(t=>`
-    <div class="track"><b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license}</span>
-    ${audioURLs[t.id]? `<br><audio controls src="${audioURLs[t.id]}" style="width:100%;margin:10px 0"></audio>` : `<br><span style="color:#555;font-size:12px">audio non disponibile dopo il refresh</span>`}
+    <div class="track"><b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license}</span><br>
+    ${t.audioData? `<audio controls src="${t.audioData}" style="width:100%;margin:10px 0"></audio>` : ``}
     ${isAdmin? ` <button onclick="deleteTrack('${t.id}')" style="color:red">X</button>` : ''}
     </div>
   `).join('') || '<p style="color:#555">Empty</p>';
@@ -93,7 +97,7 @@ function render(){
     b.onclick = isAdmin? logoutAdmin : loginAdmin;
   }
 }
-
+render();
 /*
 ´´´´´´´´´´´´´´´´´´´ ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´´´´`
 ´´´´´´´´´´´´´´´´´¶¶¶¶¶¶´´´´´´´´´´´´´¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´
