@@ -629,6 +629,15 @@ footer {
   }
 }
 
+.tagline{
+  text-align:center;
+  color:#888;
+  margin-top:-10px;
+  margin-bottom:20px;
+  font-size:15px;
+  letter-spacing:1px;
+}
+
 /*
 ´´´´´´´´´´´´´´´´´´´ ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´´´´`
 ´´´´´´´´´´´´´´´´´¶¶¶¶¶¶´´´´´´´´´´´´´¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´
