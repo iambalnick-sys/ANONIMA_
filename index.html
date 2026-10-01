@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANONIMA_ — anonymous music</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#CCFF00;font-family:'Courier New',Courier,monospace;min-height:100vh;padding:20px}
+h1{font-size:32px;letter-spacing:4px;text-align:center;margin:20px 0}
+h2{color:#CCFF00;margin:25px 0 10px 0}
+input,select{background:#000;border:1px solid #CCFF00;color:#CCFF00;padding:10px;margin:5px 0;border-radius:0;font-family:inherit;width:100%;max-width:400px}
+button{background:#CCFF00;color:#000;border:none;padding:10px 20px;font-weight:700;cursor:pointer;font-family:inherit;margin:5px 0}
+.track{background:#050505;border:1px solid #333;padding:15px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+  <h1 style="color:#fff">ANONIMA<span style="color:#CCFF00">_</span></h1>
+<p style="text-align:center;color:#666;font-size:13px;margin-bottom:20px">NOT a pirate page</p>
+
+<h2>Upload</h2>
+<input id="title" placeholder="Track title">
+<select id="license">
+<option>All Rights Reserved.</option>
+<option>CC BY</option>
+<option>CC BY-NC</option>
+<option>CC BY-ND</option>
+<option>CC BY-SA</option>
+<option>CC BY-NC-ND</option>
+<option>CC BY-NC-SA</option>
+<option>Unofficial Remix</option>
+</select><br><br>
+<input type="file" id="file" accept="audio/*">
+<button onclick="upload()">Load</button>
+
+<h2>The Vault</h2>
+<p style="color:#888">Listen and vote KEEP or SKIP. 2 KEEPs + admin approval = goes live.<br>
+<span style="color:#666;font-size:13px">Vote SKIP if it is pirated content, spam or off-topic.</span></p>
+<div id="vault"></div>
+
+<h2>The Board</h2>
+<p style="color:#666;font-size:13px">Tracks approved by the community and the admin. Only original tracks or those with a valid license.</p>
+<div id="live"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
