@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://dozppoomurlbeycdnqgh.supabase.co";
 const SUPABASE_KEY = "sb_publishable_DFAyV1h7XHCkKJvzl51hKw_U9qAd62n";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = window.supabase? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 let currentUser = localStorage.getItem('anonima_user');
 if(!currentUser){
@@ -26,12 +26,14 @@ function logoutAdmin(){
 }
 
 async function loadTracks(){
+  if(!supabase){ console.error("Supabase non caricato"); return; }
   const { data, error } = await supabase.from('tracks').select('*').order('created_at', {ascending:false});
   if(!error) allTracks = data || [];
   render();
 }
 
 async function upload(){
+  if(!supabase){ alert("Supabase non caricato, ricarica la pagina"); return; }
   const title = document.getElementById('title').value.trim();
   const license = document.getElementById('license').value;
   const file = document.getElementById('file').files[0];
