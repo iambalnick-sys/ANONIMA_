@@ -76,6 +76,7 @@ function render(){
     </div>`).join('') || '<p style="color:#555">Empty</p>';
   document.getElementById('live').innerHTML = live.map(t=>`
     <div class="track"><b>${t.title}</b> <span style="color:#888;font-size:12px">${t.license}</span>
+    ${audioURLs[t.id]? `<br><audio controls src="${audioURLs[t.id]}" style="width:100%;margin:10px 0"></audio>` : `<br><span style="color:#555;font-size:12px">audio non disponibile dopo il refresh</span>`}
     ${isAdmin? ` <button onclick="deleteTrack('${t.id}')" style="color:red">X</button>` : ''}
     </div>
   `).join('') || '<p style="color:#555">Empty</p>';
@@ -92,7 +93,6 @@ function render(){
     b.onclick = isAdmin? logoutAdmin : loginAdmin;
   }
 }
-render();
 
 /*
 ´´´´´´´´´´´´´´´´´´´ ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶´´´´´´´´´´´´´´´´´´´`
